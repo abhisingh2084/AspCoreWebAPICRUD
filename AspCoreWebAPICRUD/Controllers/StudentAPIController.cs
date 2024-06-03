@@ -43,5 +43,30 @@ namespace AspCoreWebAPICRUD.Controllers
             await context.SaveChangesAsync();
             return Ok(std);
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Student>> UpdateStudent(int id, Student std)
+        {
+            if (id != std.Id)
+            {
+                return BadRequest();
+            }
+            context.Entry(std).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return Ok(std);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Student>> DeleteStudent(int id)
+        {
+            var std = await context.Students.FindAsync(id);
+            if(std == null)
+            {
+                return NotFound();
+            }
+            context.Students.Remove(std);
+            await context.SaveChangesAsync();
+            return Ok();
+        }
     }
 }
